@@ -1,6 +1,7 @@
 {
     "name": "keevitaja/language-detector-socket",
     "type": "library",
+    "license": "MIT",
     "description": "A high-performance PHP language detection service using Unix sockets and Efficient Language Detector.",
     "keywords": [
         "language",
