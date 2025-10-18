@@ -1,0 +1,30 @@
+{
+    "name": "keevitaja/language-detector-socket",
+    "type": "library",
+    "description": "A high-performance PHP language detection service using Unix sockets and Efficient Language Detector.",
+    "keywords": [
+        "language",
+        "detection",
+        "detector",
+        "language detector",
+        "language detection",
+        "language identification",
+        "language recognition",
+        "language classification"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Keevitaja\\LanguageDetectorSocket\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tanel Tammik"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "nitotm/efficient-language-detector": "^3.0",
+        "workerman/workerman": "^5.1"
+    }
+}
