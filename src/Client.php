@@ -34,6 +34,15 @@ class Client
 
     public function detect(string $text): array
     {
+        $text = trim($text);
+
+        // Writing an empty string to the socket won't send any data,
+        // causing fread() to hang waiting for a response that will never come.
+        // Return early with an empty result as there's no language to detect anyway.
+        if (empty($text)) {
+            return [];
+        }
+
         if (! is_writable($this->config->socket) || ! is_resource($this->socket)) {
             throw new SocketResourceException('Socket is not a resource');
         }
