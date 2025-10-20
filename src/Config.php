@@ -11,6 +11,10 @@ namespace Keevitaja\LanguageDetectorSocket;
  * @property $locales
  * @property $eldDataFile
  * @property $eldFormat
+ * @property $workerPidFile
+ * @property $workerLogFile
+ * @property $workerStdoutFile
+ * @property $workerDemonize
  */
 class Config
 {

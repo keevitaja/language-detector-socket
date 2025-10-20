@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Keevitaja\LanguageDetectorSocket;
 
+use Keevitaja\LanguageDetectorSocket\Exceptions\SocketConnectException;
+use Keevitaja\LanguageDetectorSocket\Exceptions\SocketResourceException;
+use Keevitaja\LanguageDetectorSocket\Exceptions\SocketWriteException;
+
 class Client
 {
     protected Config $config;
@@ -20,9 +24,7 @@ class Client
         $this->socket = stream_socket_client($this->socket(), $code, $message, $this->config->timeout);
 
         if (! $this->socket) {
-            $message = "Failed to connect to socket: $message ($code)";
-
-            throw new LanguageSocketException($message);
+            throw new SocketConnectException("[$code] $message");
         }
 
         stream_set_timeout($this->socket, $this->config->timeout);
@@ -32,6 +34,10 @@ class Client
 
     public function detect(string $text): array
     {
+        if (! is_writable($this->config->socket) || ! is_resource($this->socket)) {
+            throw new SocketResourceException('Socket is not a resource');
+        }
+
         fwrite($this->socket, $text);
 
         return json_decode(fread($this->socket, 8192), true);
@@ -46,6 +52,10 @@ class Client
 
     protected function socket(): string
     {
+        if (! is_writable($this->config->socket)) {
+            throw new SocketWriteException('Socket file is not writable');
+        }
+
         return 'unix://'.$this->config->socket;
     }
 }

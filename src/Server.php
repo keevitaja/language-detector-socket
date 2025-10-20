@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Keevitaja\LanguageDetectorSocket;
 
+use Keevitaja\LanguageDetectorSocket\Exceptions\SocketErrorException;
 use Nitotm\Eld\LanguageDetector;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
@@ -24,6 +25,11 @@ class Server
 
     public function run(): void
     {
+        Worker::$pidFile = $this->config->workerPidFile;
+        Worker::$logFile = $this->config->workerLogFile;
+        Worker::$stdoutFile = $this->config->workerStdoutFile;
+        Worker::$daemonize = $this->config->workerDemonize;
+
         $server = new Worker($this->socket());
 
         $server->count = $this->config->processes;
@@ -35,9 +41,7 @@ class Server
         };
 
         $server->onError = function (TcpConnection $connection, int $code, string $message): void {
-            $message = "Socket error: $message ($code)";
-
-            throw new LanguageSocketException($message);
+            throw new SocketErrorException("[$code] $message");
         };
 
         Worker::runAll();
@@ -57,9 +61,14 @@ class Server
     protected function socket(): string
     {
         $path = $this->config->socket;
+        $pid = $this->config->workerPidFile;
 
         if (file_exists($path)) {
             unlink($path);
+        }
+
+        if (file_exists($pid)) {
+            unlink($pid);
         }
 
         return 'unix://'.$path;

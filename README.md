@@ -1,6 +1,6 @@
 # Language Detector Socket
 
-A high-performance PHP language detection service using Unix sockets and [Efficient Language Detector](https://github.com/nitotm/efficient-language-detector).
+A high-performance language detection service written in PHP using Unix sockets and [Efficient Language Detector](https://github.com/nitotm/efficient-language-detector).
 
 ## Installation
 ```bash
@@ -45,7 +45,7 @@ $client->close();
 ```php
 [
     // Unix socket path
-    'socket' => '/tmp/language-detector-socket.sock',
+    'socket' => '/tmp/language.detector.sock',
 
     // Number of worker processes
     'processes' => 1,
@@ -61,5 +61,17 @@ $client->close();
 
     // Language code format (ISO639_1, ISO639_3)
     'eldFormat' => EldFormat::ISO639_1,
+
+    // Path to store the worker process ID file
+    'workerPidFile' => '/tmp/language.detector.worker.pid',
+
+    // Path to store the worker log file
+    'workerLogFile' => '/tmp/language.detector.worker.log',
+
+    // Path to store the worker an stdout log file
+    'workerStdoutFile' => '/tmp/language.detector.worker.stdout.log',
+
+    // Whether to run the worker as a daemon process
+    'workerDemonize' => false,
 ]
 ```
