@@ -37,7 +37,9 @@ class Server
         $server->onMessage = function (TcpConnection $connection, string $text): void {
             $scores = $this->detector->detect($text)->scores();
 
-            $connection->send(json_encode($scores));
+            // Cast to object to ensure JSON encodes as an object {} instead of array []
+            // This provides a consistent JSON structure even when the score array is empty
+            $connection->send(json_encode((object) $scores));
         };
 
         $server->onError = function (TcpConnection $connection, int $code, string $message): void {
